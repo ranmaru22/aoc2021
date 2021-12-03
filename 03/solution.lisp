@@ -40,4 +40,22 @@
     (* gamma epsilon)))
 
 ;; Part 2 solution
-
+(defun find-life-support-rating (bits)
+  (labels ((find-value (bits cmp-fn &optional (offset 0))
+             (if (<= (length bits) 1)
+                 (car bits)
+                 (let* ((bitcount (nth offset (count-bits bits)))
+                        (mcv (if (funcall cmp-fn (car bitcount) (cdr bitcount)) #\0 #\1)))
+                   
+                   (find-value
+                    (remove-if-not (lambda (ch) (char= mcv ch))
+                                   bits
+                                   :key (lambda (bit) (char bit offset)))
+                    cmp-fn
+                    (1+ offset))))))
+    
+    (let ((oxygen-generator-value (find-value bits #'>))
+          (co2-scrubber-value (find-value bits #'<=)))
+      
+      (* (parse-integer oxygen-generator-value :radix 2)
+         (parse-integer co2-scrubber-value :radix 2)))))
