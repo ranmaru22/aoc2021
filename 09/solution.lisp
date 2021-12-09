@@ -1,5 +1,8 @@
-(ql:quickload "iterate")
-(use-package :iterate)
+(defpackage :aoc2021-day9
+  (:use :cl
+   :iterate))
+
+(in-package :aoc2021-day9)
 
 (defparameter *rows* nil)
 (defparameter *cols* nil)
@@ -24,42 +27,35 @@
      (aref heightmap (car coords) (cdr coords)))
    points))
 
-(defun find-neighbours (row col)
+(defun find-neighbours (heightmap row col)
   (iter
-    (for y from (1- row) to (1+ row) by 2)
-    (for x from (1- col) to (1+ col) by 2)
-    
-    (unless (or (minusp y)
-                (>= y *rows*))
-      (collect (cons y col) into coordinates))
-    
-    (unless (or (minusp x)
-                (>= x *cols*))
-      (collect (cons row x) into coordinates))
-    
-    (finally (return coordinates))))
+    (for (dy . dx) :in '((-1 . 0) (1 . 0) (0 . -1) (0 . 1)))
+    (for y = (+ dy row))
+    (for x = (+ dx col))
+    (when (array-in-bounds-p heightmap y x)
+      (collect (cons y x)))))
 
 (defun lowest-point-p (heightmap row col)
   (let ((value (aref heightmap row col))
-        (neighbours (resolve heightmap (find-neighbours row col))))
+        (neighbours (resolve heightmap (find-neighbours heightmap row col))))
     (every (lambda (n) (< value n)) neighbours)))
 
 (defun collect-low-points (heightmap)
-  (iter outer (for row from 0 below *rows*)
-    (iter (for col from 0 below *cols*)
+  (iter outer (for row :from 0 :below *rows*)
+    (iter (for col :from 0 :below *cols*)
       (when (lowest-point-p heightmap row col)
         (in outer (collect (cons row col)))))))
 
 (defun make-tree (heightmap row col)
   (let ((seen (list (cons row col))))
+    
     (labels ((rec (heightmap row col)
-               (iter (for (x . y) in (find-neighbours row col))
-
-                 (unless (or (member (cons x y) seen :test #'equal)
-                             (= (aref heightmap x y) 9))
+               (iter
+                 (for (x . y) :in (find-neighbours heightmap row col))
+                 (for value = (aref heightmap x y))
+                 (unless (or (member (cons x y) seen :test #'equal) (= value 9))
                    (push (cons x y) seen)
-                   (collect (rec heightmap x y) into ret))
-
+                   (collect (rec heightmap x y) :into ret))
                  (finally (return (cons (cons row col) ret))))))
       
       (rec heightmap row col))))
@@ -68,19 +64,18 @@
   (cond
     ((null tree) nil)
     ((not (listp (cdr tree))) (list tree))
-    (t (iter (for node in tree)
+    (t (iter (for node :in tree)
          (appending (flatten-tree node))))))
 
 (defun build-basins (heightmap)
   (iter (for (x . y) in (collect-low-points heightmap))
-    (collect (make-tree heightmap x y) into trees)
+    (collect (make-tree heightmap x y) :into trees)
     (finally (return
                (mapcar (lambda (points) (resolve heightmap points))
                        (mapcar #'flatten-tree trees))))))
 
 (defun max3 (lst &optional ret)
-  (if (or (endp lst)
-          (= (length ret) 3))
+  (if (or (endp lst) (= (length ret) 3))
       ret
       (let* ((max (apply #'max lst))
              (rest (remove max lst :count 1)))
