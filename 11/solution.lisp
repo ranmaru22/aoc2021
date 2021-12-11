@@ -50,12 +50,13 @@
       (setf el (1+ el)))))
 
 (defun reset (octopodes)
-  (let ((count 0))
+  (let ((dim (array-dimensions octopodes))
+        (count 0))
     (loop-array octopodes
       (when (> el 9)
         (setf el 0)
         (incf count)))
-    (values count (= count 100))))
+    (values count (= count (apply #'* dim)))))
 
 (defun flash (octopodes &optional exclude)
   (let* ((ready-to-flash (set-difference (indices (lambda (x) (> x 9)) octopodes) exclude :test #'equal))
