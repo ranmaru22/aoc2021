@@ -54,8 +54,15 @@
                    (fold-paper (car instructions) paper))))
 
 (defun print-points (points)
-  (loop :for (x . y) :in points
-        :do (format t "(~a,~a)," x y)))
+  (let ((max-x (apply #'max (mapcar #'car points)))
+        (max-y (apply #'max (mapcar #'cdr points))))
+    
+    (loop :for y :from 0 :upto max-y
+          :do (let ((nth-points (remove y points :key #'cdr :test-not #'=)))
+                (loop :for x :from 0 :upto max-x
+                      :do (format t "~:[ ~;█~]" (member x nth-points :key #'car))
+                      :finally (terpri))))))
+
 
 ;; Part 1 solution
 (defun solve-1 (filename)
