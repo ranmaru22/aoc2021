@@ -1,8 +1,8 @@
-(defpackage :aoc2021-day9
-  (:use :cl
-   :iterate))
-
-(in-package :aoc2021-day9)
+(defpackage :aoc2021-day09
+  (:use #:cl
+        #:iterate)
+  (:export #:solve-1 #:solve-2))
+(in-package :aoc2021-day09)
 
 (defparameter *rows* nil)
 (defparameter *cols* nil)
@@ -82,7 +82,7 @@
         (max3 rest (cons max ret)))))
 
 ;; Part 1 solution
-(defun solve (filename)
+(defun solve-1 (filename)
   (let ((heightmap (read-input filename)))
     (apply #'+ (mapcar #'1+ (resolve heightmap (collect-low-points heightmap))))))
 

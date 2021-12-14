@@ -1,16 +1,20 @@
-(ql:quickload "split-sequence")
+(defpackage :aoc2021-day08
+  (:use #:cl
+        #:split-sequence)
+  (:export #:solve-1 #:solve-2))
+(in-package :aoc2021-day08)
 
 ;; Read input
 (defun read-file (filename)
   (with-open-file (in filename)
     (labels ((sort-chars (s) (sort s #'char-lessp))
              (split-and-sort (s)
-               (mapcar #'sort-chars (split-sequence:split-sequence #\Space s :remove-empty-subseqs t))))
+               (mapcar #'sort-chars (split-sequence #\Space s :remove-empty-subseqs t))))
       
       (do* ((line (read-line in nil 'eof) (read-line in nil 'eof))
             (ret))
            ((eq line 'eof) (reverse ret))     
-        (setf ret (cons (mapcar #'split-and-sort (split-sequence:split-sequence #\| line)) ret))))))
+        (setf ret (cons (mapcar #'split-and-sort (split-sequence #\| line)) ret))))))
 
 ;; Helpers
 (defun find-prime-signals (lst &optional ret rem)
@@ -91,7 +95,7 @@
                  ret))))
 
 ;; Part 1 solution
-(defun solve (filename)
+(defun solve-1 (filename)
   (let ((patterns (read-file filename)))
     (count-unique-digits patterns)))
 

@@ -1,9 +1,13 @@
-(ql:quickload "split-sequence")
+(defpackage :aoc2021-day07
+  (:use #:cl
+        #:split-sequence)
+  (:export #:solve-1 #:solve-2))
+(in-package :aoc2021-day07)
 
 ;; Read input
 (defun read-file (filename)
   (with-open-file (in filename)
-    (sort (mapcar #'parse-integer (split-sequence:split-sequence #\, (read-line in nil))) #'<)))
+    (sort (mapcar #'parse-integer (split-sequence #\, (read-line in nil))) #'<)))
 
 ;; Helpers
 (defun median (lst)
@@ -18,7 +22,7 @@
     (mapcar (lambda (x) (/ (* x (+ x 1)) 2)) diff)))
 
 ;; Part 1 solution
-(defun solve (filename)
+(defun solve-1 (filename)
   (let ((crabs (read-file filename)))
     (reduce #'+ (diff-to-target-pos crabs (median crabs)))))
 

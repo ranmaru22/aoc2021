@@ -1,4 +1,9 @@
-(ql:quickload "split-sequence")
+(defpackage :aoc2021-day05
+  (:use #:cl
+        #:split-sequence)
+  (:export #:solve-1 #:solve-2))
+(in-package :aoc2021-day05)
+
 (defparameter *dimensions* 1000)
 
 ;; Read input
@@ -9,9 +14,9 @@
              (let* ((first-pair-end (position #\Space line))
                     (second-pair-start (+ first-pair-end 4)))
                (cons (mapcar #'parse-integer
-                             (split-sequence:split-sequence #\, (subseq line 0 first-pair-end)))
+                             (split-sequence #\, (subseq line 0 first-pair-end)))
                      (list (mapcar #'parse-integer
-                                   (split-sequence:split-sequence #\, (subseq line second-pair-start))))))))
+                                   (split-sequence #\, (subseq line second-pair-start))))))))
       
       (do* ((line (read-line in nil 'eof) (read-line in nil 'eof))
             (ret))
@@ -51,9 +56,9 @@
     count))
 
 ;; Part 1 solution
-(defun calculate-danger (filename)
+(defun solve-1 (filename)
   (count-danger-points (draw-lines (read-file filename) :ignore-diagonals t)))
 
 ;; Part 2 solution
-(defun calculate-danger-2 (filename)
+(defun solve-2 (filename)
   (count-danger-points (draw-lines (read-file filename))))

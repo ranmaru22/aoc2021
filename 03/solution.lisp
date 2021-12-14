@@ -1,5 +1,10 @@
+(defpackage :aoc2021-day03
+  (:use #:cl)
+  (:export #:solve-1 #:solve-2))
+(in-package :aoc2021-day03)
+
 ;; Read input
-(defun read-file-as-lines (filename)
+(defun read-input (filename)
   (with-open-file (in filename)
     (do* ((line (read-line in nil 'eof) (read-line in nil 'eof))
           (ret (list line) (cons line ret)))
@@ -39,6 +44,9 @@
         (epsilon (compare-bits (count-bits bits) #'<)))
     (* gamma epsilon)))
 
+(defun solve-1 (filename)
+  (gamma*epsilon (read-input filename)))
+
 ;; Part 2 solution
 (defun find-life-support-rating (bits)
   (labels ((find-value (bits cmp-fn &optional (offset 0))
@@ -59,3 +67,6 @@
       
       (* (parse-integer oxygen-generator-value :radix 2)
          (parse-integer co2-scrubber-value :radix 2)))))
+
+(defun solve-2 (filename)
+  (find-life-support-rating (read-input filename)))

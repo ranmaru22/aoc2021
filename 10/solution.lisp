@@ -1,8 +1,7 @@
 (defpackage :aoc2021-day10
   (:use #:cl
-        #:uiop
-        #:iterate))
-
+        #:iterate)
+  (:export #:solve-1 #:solve-2))
 (in-package :aoc2021-day10)
 
 ;; Read input

@@ -1,9 +1,13 @@
-(ql:quickload "split-sequence")
+(defpackage :aoc2021-day06
+  (:use #:cl
+        #:split-sequence)
+  (:export #:solve-1 #:solve-2))
+(in-package :aoc2021-day06)
 
 ;; Read input
 (defun read-file (filename)
   (with-open-file (in filename)
-    (mapcar #'parse-integer (split-sequence:split-sequence #\, (read-line in nil)))))
+    (mapcar #'parse-integer (split-sequence #\, (read-line in nil)))))
 
 ;; Helpers
 (defun make-fish-list (inp)
@@ -28,7 +32,7 @@
       (simulate (next-day fish) (1- num-days))))
 
 ;; Part 1 solution
-(defun solve (filename)
+(defun solve-1 (filename)
   (let ((fish (make-fish-list (read-file filename))))
     (reduce #'+ (simulate fish 80) :key #'cdr)))
 

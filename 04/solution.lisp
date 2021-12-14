@@ -1,3 +1,8 @@
+(defpackage :aoc2021-day04
+  (:use #:cl)
+  (:export #:solve-1 #:solve-2))
+(in-package :aoc2021-day04)
+
 ;; Read input
 (defun read-input (filename)
   (with-open-file (in filename)
@@ -29,13 +34,13 @@
         (play-bingo (cdr nums) (cross-out-number (car nums) boards) (car nums)))))
 
 ;; Part 1 solution
-(defun winning-score (filename)
+(defun solve-1 (filename)
   (multiple-value-bind (nums boards) (read-input filename)
     (multiple-value-bind (winning-board last-num) (play-bingo nums boards)
-        (* last-num (reduce #'+ (reduce #'append (subst 0 -1 winning-board)))))))
+      (* last-num (reduce #'+ (reduce #'append (subst 0 -1 winning-board)))))))
 
 ;; Part 2 solution
-(defun losing-score (filename)
+(defun solve-2 (filename)
   (multiple-value-bind (nums boards) (read-input filename)
     (labels ((play-again (nums boards)
                (multiple-value-bind (winning-board last-num nums boards) (play-bingo nums boards)

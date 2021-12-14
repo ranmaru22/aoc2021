@@ -1,6 +1,6 @@
 (defpackage :aoc2021-day12
-  (:use #:cl))
-
+  (:use #:cl)
+  (:export #:solve-1 #:solve-2))
 (in-package :aoc2021-day12)
 
 ;; Read input
@@ -29,7 +29,7 @@
          (rights (remove vertex edges :key #'cdr :test-not #'equal)))
     (append (mapcar #'cdr lefts) (mapcar #'car rights))))
 
-(defun make- (vertices edges)
+(defun make-graph (vertices edges)
   (mapcar (lambda (vertex) (cons vertex (find-connections vertex edges))) vertices))
 
 (defun find-neigbours (graph vertex)
