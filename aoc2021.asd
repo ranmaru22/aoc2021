@@ -6,6 +6,7 @@
                :uiop
                :iterate
                :split-sequence
+               :select
                :str)
   :components ((:file "01/solution")
                (:file "02/solution")
@@ -21,4 +22,5 @@
                (:file "12/solution")
                (:file "13/solution")
                (:file "14/solution")
-               (:file "15/solution")))
+               (:file "15/solution")
+               (:file "16/solution")))
