@@ -27,4 +27,6 @@
                (:file "17/solution")
                (:file "18/solution")
                (:file "20/solution")
-               (:file "21/solution")))
+               (:file "21/solution")
+               (:file "22/solution")
+               (:file "24/solution")))

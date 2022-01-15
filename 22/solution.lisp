@@ -1,0 +1,15 @@
+(defpackage :aoc2021-day22
+  (:use #:cl #:str)
+  (:export #:solve-1 #:solve-2))
+(in-package :aoc2021-day22)
+
+(defun read-input (filename)
+  (mapcar (lambda (line)
+            (let ((words (words line)))
+              (cons (read-from-string (car words))
+                    (mapcar (lambda (w)
+                              (let ((cs (split ".." w)))
+                                (list (read-from-string (subseq (car cs) 2))
+                                      (read-from-string (cadr cs)))))
+                            (split #\, (cadr words))))))
+          (lines (from-file filename))))
